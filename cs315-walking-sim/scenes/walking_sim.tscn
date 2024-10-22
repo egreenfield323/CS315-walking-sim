@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://xopg8msumh1u"]
+
+[ext_resource type="Script" path="res://scripts/alert_zone.gd" id="1_0pl1c"]
+[ext_resource type="PackedScene" uid="uid://86m0u0e14tnv" path="res://scenes/player.tscn" id="2_d01qm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_82l12"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_chjg0"]
+size = Vector3(4.34375, 0.105469, 4.03809)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pk8hp"]
+
+[node name="WalkingSim" type="Node3D"]
+
+[node name="AlertZone" type="Area3D" parent="."]
+script = ExtResource("1_0pl1c")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AlertZone"]
+shape = SubResource("BoxShape3D_82l12")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="AlertZone/CollisionShape3D"]
+
+[node name="Label3D" type="Label3D" parent="AlertZone/CollisionShape3D/AudioStreamPlayer3D"]
+visible = false
+text = "Press E to interact"
+
+[node name="Player" parent="." instance=ExtResource("2_d01qm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.932945, 0)
+
+[node name="ground" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.447266, 0)
+shape = SubResource("BoxShape3D_chjg0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ground"]
+transform = Transform3D(4.26931, 0, 0, 0, 0.0863025, 0, 0, 0, 3.98342, 0, -0.457561, 0)
+mesh = SubResource("BoxMesh_pk8hp")
+
+[connection signal="body_entered" from="AlertZone" to="AlertZone" method="_on_body_entered"]
+[connection signal="body_exited" from="AlertZone" to="AlertZone" method="_on_body_exited"]
